@@ -33,45 +33,46 @@ static char c000000[]                    = "#000000"; // placeholder value
 static char normfgcolor[]                = "#ffffff";
 static char normbgcolor[]                = "#000000";
 static char normbordercolor[]            = "#000000";
-static char normfloatcolor[]             = "#db8fd9";
+static char normfloatcolor[]             = "#a61b47";
 
 static char selfgcolor[]                 = "#ff0000";
 static char selbgcolor[]                 = "#ffffff";
 static char selbordercolor[]             = "#ffffff";
-static char selfloatcolor[]              = "#005577";
+static char selfloatcolor[]              = "#02a9ea";
 
 static char titlenormfgcolor[]           = "#bbbbbb";
 static char titlenormbgcolor[]           = "#222222";
 static char titlenormbordercolor[]       = "#444444";
-static char titlenormfloatcolor[]        = "#db8fd9";
+static char titlenormfloatcolor[]        = "#a61b47";
 
-static char titleselfgcolor[]            = "#eeeeee";
-static char titleselbgcolor[]            = "#005577";
-static char titleselbordercolor[]        = "#005577";
-static char titleselfloatcolor[]         = "#005577";
+static char titleselfgcolor[]            = "#ffffff";
+static char titleselbgcolor[]            = "#000000";
+static char titleselbordercolor[]        = "#000000";
+static char titleselfloatcolor[]         = "#02a9ea";
 
 static char tagsnormfgcolor[]            = "#bbbbbb";
 static char tagsnormbgcolor[]            = "#222222";
 static char tagsnormbordercolor[]        = "#444444";
-static char tagsnormfloatcolor[]         = "#db8fd9";
+static char tagsnormfloatcolor[]         = "#a61b47";
 
 static char tagsselfgcolor[]             = "#eeeeee";
-static char tagsselbgcolor[]             = "#005577";
-static char tagsselbordercolor[]         = "#005577";
-static char tagsselfloatcolor[]          = "#005577";
+static char tagsselbgcolor[]             = "#a61b47";
+static char tagsselbordercolor[]         = "#a61b47";
+static char tagsselfloatcolor[]          = "#a61b47";
 
-static char hidnormfgcolor[]             = "#005577";
-static char hidselfgcolor[]              = "#227799";
+static char hidnormfgcolor[]             = "#02a9ea";
+static char hidselfgcolor[]              = "#0285b8";
 static char hidnormbgcolor[]             = "#222222";
 static char hidselbgcolor[]              = "#222222";
 
 static char urgfgcolor[]                 = "#bbbbbb";
 static char urgbgcolor[]                 = "#222222";
 static char urgbordercolor[]             = "#ff0000";
-static char urgfloatcolor[]              = "#db8fd9";
+static char urgfloatcolor[]              = "#a61b47";
 
 
-static const unsigned int baralpha = 0xd0;
+// static const unsigned int baralpha = 0xd0;
+static const unsigned int baralpha = OPAQUE;
 // static const unsigned int borderalpha = OPAQUE;
 static const unsigned int borderalpha = 0x0;
 static const unsigned int alphas[][3] = {
@@ -79,7 +80,7 @@ static const unsigned int alphas[][3] = {
 	[SchemeNorm]         = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]          = { OPAQUE, baralpha, borderalpha },
 	[SchemeTitleNorm]    = { OPAQUE, baralpha, borderalpha },
-	[SchemeTitleSel]     = { OPAQUE, baralpha, borderalpha },
+	[SchemeTitleSel]     = { OPAQUE, 0.0,      0.0 },
 	[SchemeTagsNorm]     = { OPAQUE, baralpha, borderalpha },
 	[SchemeTagsSel]      = { OPAQUE, baralpha, borderalpha },
 	[SchemeHidNorm]      = { OPAQUE, baralpha, borderalpha },
@@ -222,7 +223,7 @@ static const Layout layouts[] = {
 /* key definitions */
 #define MODKEY Mod1Mask
 #define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                       KEY,      comboview,      {.ui = 1 << TAG} }, \
+	{ MODKEY,                       KEY,      comboview,      {.i = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ShiftMask,             KEY,      combotag,       {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
