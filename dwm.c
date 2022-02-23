@@ -421,6 +421,9 @@ struct Client {
 	unsigned int icw, ich;
 	Picture icon;
 	#endif // BAR_WINICON_PATCH
+	#if MNG_LAYOUT_VARCOL
+	int isleft;
+	#endif // MNG_VARCOL
 };
 
 typedef struct {
@@ -525,6 +528,11 @@ struct Monitor {
 	int previewshow;
 	Pixmap tagmap[NUMTAGS];
 	#endif // BAR_TAGPREVIEW_PATCH
+	#if MNG_LAYOUT_VARCOL
+	float colfact[3];     /* Relative sizes of the different column types */
+	int nmastercols;      /* The number of master columns to use */
+	int nrightcols;       /* The number of right "stack" columns to use */
+	#endif // MNG_LAYOUT_VARCOL
 };
 
 typedef struct {
@@ -566,6 +574,9 @@ typedef struct {
 	#if XKB_PATCH
 	int xkb_layout;
 	#endif // XKB_PATCH
+	#if MNG_LAYOUT_VARCOL
+	int isleft;
+	#endif // MNG_VARCOL
 } Rule;
 
 #if XKB_PATCH
