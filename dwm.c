@@ -2849,11 +2849,75 @@ void
 resizeclient(Client *c, int x, int y, int w, int h)
 {
 	XWindowChanges wc;
+#if MNG_VANITY_GAPS
+	int					lgappx	= gappx;
+	int					gapN, gapE, gapW;
+	int					edges	= 0;
+	int					margin;
+
+	if (c->mon->mw <= 1024 || c->mon->mh <= 1024) {
+		lgappx = 0;
+	}
+
+	margin = lgappx * 2;
+
+	/*
+		Clients are generally arranged relative to the client above them, so
+		include the entire gap to account for the one below it.
+	*/
+	gapN = lgappx;
+
+	gapE = lgappx / 2;
+	gapW = lgappx - gapE;
+
+
+	/*
+		Adjust gaps for any edge of a client that is next to the edge of the
+		monitor.
+	*/
+	if ((c->mon->mx + c->mon->mw) - (x + w) < margin) {
+		gapE = 0;
+		edges++;
+	}
+	if ((c->mon->my + c->mon->mh) - (y + h) < margin) {
+		edges++;
+	}
+
+	if ((x - c->mon->mx) < margin) {
+		gapW = 0;
+		edges++;
+	}
+	if ((y - c->mon->my) < margin) {
+		gapN = 0;
+		edges++;
+	}
+
+	if (c->isfloating || edges >= 4) {
+		gapN = gapE = gapW = 0;
+	} else {
+		/*
+			MNG Hack
+
+			I am using picom/compton to show a "shadow" on just the bottom edge
+			as if it was a 1px border. But, I need a place to show this so steal
+			1px from the gapN.
+
+			This is very hacky, but works for my usecase.
+		*/
+		h--;
+	}
+	c->oldx = c->x; c->x = wc.x = x + gapW;
+	c->oldy = c->y; c->y = wc.y = y + gapN;
+	c->oldw = c->w; c->w = wc.width  = w - (gapW + gapE);
+	c->oldh = c->h; c->h = wc.height = h - (gapN);
+#else // MNG_VANITY_GAPS
 
 	c->oldx = c->x; c->x = wc.x = x;
 	c->oldy = c->y; c->y = wc.y = y;
 	c->oldw = c->w; c->w = wc.width = w;
 	c->oldh = c->h; c->h = wc.height = h;
+#endif // MNG_VANITY_GAPS
+
 	#if EXRESIZE_PATCH
 	c->expandmask = 0;
 	#endif // EXRESIZE_PATCH

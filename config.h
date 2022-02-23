@@ -2,6 +2,7 @@
 
 /* appearance */
 static const unsigned int borderpx       = 0;   /* border pixel of windows */
+static const unsigned int gappx		     = 24;  /* gap between windows */
 static const unsigned int snap           = 32;  /* snap pixel */
 static const int swallowfloating         = 0;   /* 1 means swallow floating windows by default */
 static const unsigned int gappih         = 20;  /* horiz inner gap between windows */
@@ -26,7 +27,7 @@ static const int nrightcols		         = 1;	/* number of right columns for n colu
 static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
 static int tiledindicatortype            = INDICATOR_NONE;
 static int floatindicatortype            = INDICATOR_TOP_LEFT_SQUARE;
-static const char *fonts[]		         = { "monospace:size=10", "TerminessTTF Nerd Font Mono:size=24" };
+static const char *fonts[]		         = { "monospace:size=10", "TerminessTTF Nerd Font Mono:size=18" };
 
 static char c000000[]                    = "#000000"; // placeholder value
 
@@ -231,6 +232,9 @@ static const Layout layouts[] = {
 /* commands */
 static const char *termcmd[]  = { "myterm", NULL };
 
+/* This defines the name of the executable that handles the bar (used for signalling purposes) */
+#define STATUSBAR "dwmblocks"
+
 static Key keys[] = {
 	/* modifier                     key            function                argument */
 	{ MODKEY|ShiftMask,             XK_Return,     spawn,                  {.v = termcmd } },
@@ -252,8 +256,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_l,          setcfact,               {.f = -0.25} },
 	{ MODKEY|ShiftMask,             XK_o,          setcfact,               {0} },
 	{ MODKEY,                       XK_Return,     zoom,                   {0} },
-
-	{ MODKEY|Mod4Mask,              XK_0,          togglegaps,             {0} },
 
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
 	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
