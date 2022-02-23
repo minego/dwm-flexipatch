@@ -1634,6 +1634,11 @@ createmon(void)
 	m->gappoh = gappoh;
 	m->gappov = gappov;
 	#endif // VANITYGAPS_PATCH
+	#if MNG_LAYOUT_VARCOL
+	m->colfact[0] = colfact[0];
+	m->colfact[1] = colfact[1];
+	m->colfact[2] = colfact[2];
+	#endif // MNG_VARCOL
 	for (mi = 0, mon = mons; mon; mon = mon->next, mi++); // monitor index
 	m->num = mi;
 	#if MONITOR_RULES_PATCH
