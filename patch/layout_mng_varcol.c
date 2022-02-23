@@ -25,7 +25,7 @@ static int isleft(Client *c)
 		return 0;
 	}
 
-	return c->isleft;
+	return c->isLeft;
 }
 
 /* Return non-zero if the currently selected client is in a master column */
@@ -92,7 +92,7 @@ void setcolfact(const Arg *arg)
 static void pushleft(const Arg *arg)
 {
 	if (selmon && selmon->sel) {
-		selmon->sel->isleft = !selmon->sel->isleft;
+		selmon->sel->isLeft = !selmon->sel->isLeft;
 
 		focus(selmon->sel);
 	}

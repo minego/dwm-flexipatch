@@ -14,6 +14,11 @@ static const int swallowfloating         = 0;   /* 1 means swallow floating wind
 #if BAR_TAGPREVIEW_PATCH
 static const int scalepreview            = 4;        /* Tag preview scaling */
 #endif // BAR_TAGPREVIEW_PATCH
+#if MNG_LAYOUT_VARCOL
+/* Variable column layout */
+static const int nmastercols	         = 1;	/* number of master columns for n column layout */
+static const int nrightcols		         = 1;	/* number of right columns for n column layout */
+#endif // MNG_LAYOUT_VARCOL
 #if NO_MOD_BUTTONS_PATCH
 static int nomodbuttons                  = 1;   /* allow client mouse button bindings that have no modifier */
 #endif // NO_MOD_BUTTONS_PATCH

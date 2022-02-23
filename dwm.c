@@ -422,7 +422,7 @@ struct Client {
 	Picture icon;
 	#endif // BAR_WINICON_PATCH
 	#if MNG_LAYOUT_VARCOL
-	int isleft;
+	int isLeft;
 	#endif // MNG_VARCOL
 };
 
@@ -575,7 +575,7 @@ typedef struct {
 	int xkb_layout;
 	#endif // XKB_PATCH
 	#if MNG_LAYOUT_VARCOL
-	int isleft;
+	int isLeft;
 	#endif // MNG_VARCOL
 } Rule;
 
@@ -879,6 +879,9 @@ applyrules(Client *c)
 	#if SWALLOW_PATCH
 	c->noswallow = -1;
 	#endif // SWALLOW_PATCH
+	#if MNG_LAYOUT_VARCOL
+	c->isLeft = 0;
+	#endif // MNG_LAYOUT_VARCOL
 	#if SIZEHINTS_ISFREESIZE_PATCH
 	c->isfreesize = 1;
 	#endif // SIZEHINTS_ISFREESIZE_PATCH
@@ -923,6 +926,9 @@ applyrules(Client *c)
 			c->isterminal = r->isterminal;
 			c->noswallow = r->noswallow;
 			#endif // SWALLOW_PATCH
+			#if MNG_LAYOUT_VARCOL
+			c->isLeft = r->isLeft;
+			#endif // MNG_LAYOUT_VARCOL
 			#if SIZEHINTS_ISFREESIZE_PATCH
 			c->isfreesize = r->isfreesize;
 			#endif // SIZEHINTS_ISFREESIZE_PATCH
