@@ -11,6 +11,11 @@ static const unsigned int snap           = 32;  /* snap pixel */
 #if SWALLOW_PATCH
 static const int swallowfloating         = 0;   /* 1 means swallow floating windows by default */
 #endif // SWALLOW_PATCH
+#if MNG_LAYOUT_VARCOL
+/* Variable column layout */
+static const int nmastercols	         = 1;	/* number of master columns for n column layout */
+static const int nrightcols		         = 1;	/* number of right columns for n column layout */
+#endif // MNG_LAYOUT_VARCOL
 #if NO_MOD_BUTTONS_PATCH
 static int nomodbuttons                  = 1;   /* allow client mouse button bindings that have no modifier */
 #endif // NO_MOD_BUTTONS_PATCH

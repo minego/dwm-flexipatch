@@ -18,6 +18,10 @@ static const int statusmon               = 'A';
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
 
+/* Variable column layout */
+static const int nmastercols	         = 1;	/* number of master columns for n column layout */
+static const int nrightcols		         = 1;	/* number of right columns for n column layout */
+
 /* Indicators: see patch/bar_indicators.h for options */
 static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
 static int tiledindicatortype            = INDICATOR_NONE;
@@ -168,9 +172,9 @@ static const Rule rules[] = {
 
 	RULE(.class = "Menu",				.isfloating = 1, .floatpos = "50% 50% 500W 500h" )
 
-	RULE(.class = "Slack",				.tags = 1 << 5, .isleft = 1)
-	RULE(.class = "TelegramDesktop",	.tags = 1 << 5, .isleft = 1)
-	RULE(.class = "googlemessages",		.tags = 1 << 5, .isleft = 1)
+	RULE(.class = "Slack",				.tags = 1 << 5, .isLeft = 1)
+	RULE(.class = "TelegramDesktop",	.tags = 1 << 5, .isLeft = 1)
+	RULE(.class = "googlemessages",		.tags = 1 << 5, .isLeft = 1)
 
 	RULE(.class = "Spotify",			.tags = 1 << 7)
 };
