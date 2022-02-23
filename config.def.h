@@ -1,6 +1,9 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
+#if MNG_VANITY_GAPS
+static const unsigned int gappx		     = 24;  /* gap between windows */
+#endif MNG_VANITY_GAPS
 #if ROUNDED_CORNERS_PATCH
 static const unsigned int borderpx       = 0;   /* border pixel of windows */
 static const int corner_radius           = 10;
