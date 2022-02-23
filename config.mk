@@ -29,7 +29,7 @@ FREETYPEINC = /usr/include/freetype2
 #KVMLIB = -lkvm
 
 # Uncomment this for the alpha patch / BAR_ALPHA_PATCH
-#XRENDER = -lXrender
+XRENDER = -lXrender
 
 # Uncomment this for the mdpcontrol patch / MDPCONTROL_PATCH
 #MPDCLIENT = -lmpdclient
@@ -46,7 +46,7 @@ FREETYPEINC = /usr/include/freetype2
 #XEXTLIB = -lXext
 
 # Uncomment this for the swallow patch / SWALLOW_PATCH
-#XCBLIBS = -lX11-xcb -lxcb -lxcb-res
+XCBLIBS = -lX11-xcb -lxcb -lxcb-res
 
 # This is needed for the winicon patch / BAR_WINICON_PATCH
 #IMLIB2LIBS = -lImlib2

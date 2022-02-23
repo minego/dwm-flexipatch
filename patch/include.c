@@ -359,4 +359,6 @@
 #if TILE_LAYOUT
 #include "layout_tile.c"
 #endif
-
+#if MNG_LAYOUT_VARCOL
+#include "layout_mng_varcol.c"
+#endif

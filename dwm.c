@@ -397,6 +397,9 @@ struct Client {
 	#if BAR_WINICON_PATCH
 	XImage *icon;
 	#endif // BAR_WINICON_PATCH
+	#if MNG_LAYOUT_VARCOL
+	int isleft;
+	#endif // MNG_VARCOL
 };
 
 typedef struct {
@@ -497,6 +500,11 @@ struct Monitor {
 	Client *lastsel;
 	const Layout *lastlt;
 	#endif // IPC_PATCH
+	#if MNG_LAYOUT_VARCOL
+	float colfact[3];     /* Relative sizes of the different column types */
+	int nmastercols;      /* The number of master columns to use */
+	int nrightcols;       /* The number of right "stack" columns to use */
+	#endif // MNG_VARCOL
 };
 
 typedef struct {
@@ -535,6 +543,9 @@ typedef struct {
 	#if XKB_PATCH
 	int xkb_layout;
 	#endif // XKB_PATCH
+	#if MNG_LAYOUT_VARCOL
+	int isleft;
+	#endif // MNG_VARCOL
 } Rule;
 
 #if XKB_PATCH
