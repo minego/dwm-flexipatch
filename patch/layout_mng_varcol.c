@@ -319,7 +319,7 @@ void incncols(const Arg *arg)
 		selmon->nmastercols = MAX(selmon->nmastercols + arg->i, 0);
 
 		/* Auto adjust nmaster as well */
-		selmon->nmaster = MAX(selmon->nmaster, selmon->nmastercols);
+		selmon->nmaster = selmon->nmastercols;
 	} else if (isleft(selmon->sel)) {
 		/* left */
 		;
