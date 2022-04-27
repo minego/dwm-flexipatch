@@ -512,7 +512,7 @@
  * hold MOD and then press and hold 1 and 3 together.
  * https://dwm.suckless.org/patches/combo/
  */
-#define COMBO_PATCH 1
+#define COMBO_PATCH 0
 
 /* Allow dwm to execute commands from autostart array in your config.h file. When dwm exits
  * then all processes from autostart array will be killed.
@@ -1349,4 +1349,17 @@
 	My own version of the gaps
 */
 #define MNG_VANITY_GAPS 1
+
+/*
+	MNG rememver tags
+
+	Changes some behaviors with tags in a way that fits better with my workflow:
+
+	1) The most recent tag that was directly selected (mod+x) is remembered, and
+	new clients are set to that tag, instead of all visible tags.
+
+	2) Selecting a tag directly (mod+x) will select that tag AND any that were
+	visible the last time that tag was selected.
+*/
+#define MNG_REMEMBER_TAGS 1
 
