@@ -250,6 +250,7 @@ static Key keys[] = {
 
 	{ MODKEY,                       XK_i,          incnmaster,             {.i = +1 } },
 	{ MODKEY,                       XK_d,          incnmaster,             {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_Tab,        pushleft,			   {0} },
 
 	{ MODKEY|ShiftMask,             XK_i,	       incncols,               {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_d,	       incncols,               {.i = -1 } },
