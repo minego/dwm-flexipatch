@@ -533,6 +533,13 @@ struct Monitor {
 	int nmastercols;      /* The number of master columns to use */
 	int nrightcols;       /* The number of right "stack" columns to use */
 	#endif // MNG_LAYOUT_VARCOL
+	#if MNG_REMEMBER_TAGS
+	unsigned int createtag[2]; /* Create windows on the last tag directly selected, not all selected */
+	struct {
+		unsigned int tagset;
+		Client *zoomed;
+	} remembered[NUMTAGS];
+	#endif // MNG_REMEMBER_TAGS
 };
 
 typedef struct {
@@ -1022,9 +1029,17 @@ applyrules(Client *c)
 	#elif SCRATCHPAD_ALT_1_PATCH
 	if (c->tags != SCRATCHPAD_MASK)
 		c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
+	#elif MNG_REMEMBER_TAGS
+	c->tags = c->tags & TAGMASK;
+	if (!c->tags) {
+		c->tags = (1 << c->mon->createtag[c->mon->seltags]) & TAGMASK;
+	}
+	if (!c->tags) {
+		c->tags = c->mon->tagset[c->mon->seltags];
+	}
 	#else
 	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
-	#endif // EMPTYVIEW_PATCH
+	#endif
 }
 
 int

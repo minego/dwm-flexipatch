@@ -382,3 +382,6 @@
 #if MNG_LAYOUT_VARCOL
 #include "layout_mng_varcol.h"
 #endif
+#if MNG_REMEMBER_TAGS
+#include "remember_tags.h"
+#endif
