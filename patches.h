@@ -1363,3 +1363,18 @@
 */
 #define MNG_REMEMBER_TAGS 1
 
+/*
+	Disable Focus Stealing
+
+	https://raw.githubusercontent.com/jceb/dwm-patches/master/patches/disable_focus_stealing.patch
+
+	Author: Jan Christoph Ebersbach <jceb@e-jc.de>
+	URL: no URL yet
+	Prevents new windows from stealing the focus.
+
+	Known issue: When starting/restarting dwm, the first window that is managed
+	by dwm receives the focus.  All following windows that are even put in the
+	master area, are not focussed!
+*/
+#define DISABLE_FOCUS_STEALING 1
+

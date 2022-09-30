@@ -117,6 +117,14 @@
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X), False) + lrpad)
 #define HIDDEN(C)               ((getstate(C->win) == IconicState))
 
+#if DISABLE_FOCUS_STEALING
+#include <sys/time.h>
+
+#define MAX_STEAL_TIME		2000000 /* 2 seconds */
+struct timeval steal_timestamp;
+
+#endif
+
 /* enums */
 enum {
 	#if RESIZEPOINT_PATCH || RESIZECORNERS_PATCH
@@ -866,6 +874,30 @@ struct NumTags { char limitexceeded[NUMTAGS > 31 ? -1 : 1]; };
 #endif // SCRATCHPAD_ALT_1_PATCH
 
 /* function implementations */
+
+#if DISABLE_FOCUS_STEALING
+int allow_steal(void)
+{
+	unsigned long long s;
+	unsigned long long e;
+	struct timeval now;
+
+	gettimeofday(&now, NULL);
+
+	s = steal_timestamp.tv_sec * 1000000;
+	s += steal_timestamp.tv_usec;
+
+	e = now.tv_sec * 1000000;
+	e += now.tv_usec;
+
+	if ((e - s) <= MAX_STEAL_TIME) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+#endif	
+
 void
 applyrules(Client *c)
 {
@@ -2594,9 +2626,21 @@ manage(Window w, XWindowAttributes *wa)
 	#else
 	setclientstate(c, NormalState);
 	#endif // BAR_WINTITLEACTIONS_PATCH
+
+	#if DISABLE_FOCUS_STEALING
+	if (allow_steal()) {
+		if (c->mon == selmon)
+			unfocus(selmon->sel, 0, c);
+	} else {
+		t = selmon->sel;
+		if(c->mon != selmon || !selmon->sel)
+			c->mon->sel = c;
+	}
+	#else
 	if (c->mon == selmon)
 		unfocus(selmon->sel, 0, c);
 	c->mon->sel = c;
+	#endif
 	#if SWALLOW_PATCH
 	if (!(term && swallow(term, c))) {
 		#if RIODRAW_PATCH
@@ -2636,7 +2680,13 @@ manage(Window w, XWindowAttributes *wa)
 	XMapWindow(dpy, c->win);
 	#endif // BAR_WINTITLEACTIONS_PATCH
 	#endif // SWALLOW_PATCH
+	#if DISABLE_FOCUS_STEALING
+	if (!t || allow_steal()) {
+		focus(NULL);
+	}
+	#else
 	focus(NULL);
+	#endif
 
 	#if BAR_EWMHTAGS_PATCH
 	setfloatinghint(c);
@@ -4055,6 +4105,18 @@ spawn(const Arg *arg)
 	#if RIODRAW_PATCH
 	pid_t pid;
 	#endif // RIODRAW_PATCH
+
+	#if DISABLE_FOCUS_STEALING
+	/*
+		A user action triggered spawning the next window, so we do want focus to
+		go to that window.
+
+		There is no great way to tell if a user triggered the action so take the
+		simple approach of allowing focus stealing for a period of time after a
+		clear user action.
+	*/
+	gettimeofday(&steal_timestamp, NULL);
+	#endif
 
 	#if RIODRAW_PATCH
 	if ((pid = fork()) == 0)
