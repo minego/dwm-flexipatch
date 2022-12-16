@@ -180,7 +180,11 @@ static const Rule rules[] = {
 
 	RULE(.class = "Spotify",			.tags = 1 << 7)
 	RULE(.class = "qutebrowser",		.tags = 1 << 4)
+	RULE(.class = "firefox",			.tags = 1 << 4, .isfloating = 0)
 	RULE(.class = "Thunderbird",		.tags = 1 << 6)
+	RULE(.class = "msoutlook-nativefier-9dd141",
+										.tags = 1 << 6)
+	RULE(.class = "Steam",				.tags = 1 << 8)
 };
 
 
