@@ -428,7 +428,7 @@
  * This patch interferes with the center transient windows patches.
  * https://dwm.suckless.org/patches/alwayscenter/
  */
-#define ALWAYSCENTER_PATCH 1
+#define ALWAYSCENTER_PATCH 0
 
 /* This patch allows windows to be resized with its aspect ratio remaining constant.
  * https://dwm.suckless.org/patches/aspectresize/
@@ -1378,3 +1378,9 @@
 */
 #define DISABLE_FOCUS_STEALING 1
 
+/*
+	MNG On Screen Keyboard
+
+	Special handling for on screen keyboards
+*/
+#define MNG_OSK 1

@@ -100,6 +100,15 @@
 #else
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
 #endif // ATTACHASIDE_PATCH
+
+#if MNG_OSK
+#define ISVISIBLENOTOSK(C)		(ISVISIBLE((C)) && !((C)->iskeyboard)) 
+#define ISOSK(C)				((C) && ((C)->iskeyboard))
+#else
+#define ISVISIBLENOTOSK(C)		(ISVISIBLE((C)))
+#define ISOSK(C)				(0)
+#endif // MNG_OSK
+
 #define LENGTH(X)               (sizeof X / sizeof X[0])
 #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
@@ -432,6 +441,9 @@ struct Client {
 	#if MNG_LAYOUT_VARCOL
 	int isLeft;
 	#endif // MNG_VARCOL
+	#if MNG_OSK
+	int iskeyboard;
+	#endif // MNG_OSK
 };
 
 typedef struct {
@@ -592,6 +604,9 @@ typedef struct {
 	#if MNG_LAYOUT_VARCOL
 	int isLeft;
 	#endif // MNG_VARCOL
+	#if MNG_OSK
+	int iskeyboard;
+	#endif // MNG_OSK
 } Rule;
 
 #if XKB_PATCH
@@ -925,6 +940,9 @@ applyrules(Client *c)
 	c->isfreesize = 1;
 	#endif // SIZEHINTS_ISFREESIZE_PATCH
 	c->isfloating = 0;
+	#if MNG_OSK
+	c->iskeyboard = 0;
+	#endif // MNG_OSK
 	c->tags = 0;
 	#if RENAMED_SCRATCHPADS_PATCH
 	c->scratchkey = 0;
@@ -972,6 +990,9 @@ applyrules(Client *c)
 			c->isfreesize = r->isfreesize;
 			#endif // SIZEHINTS_ISFREESIZE_PATCH
 			c->isfloating = r->isfloating;
+			#if MNG_OSK
+			c->iskeyboard = r->iskeyboard;
+			#endif // MNG_OSK
 			c->tags |= r->tags;
 			#if RENAMED_SCRATCHPADS_PATCH
 			c->scratchkey = r->scratchkey;
@@ -1079,6 +1100,12 @@ applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact)
 {
 	int baseismin;
 	Monitor *m = c->mon;
+
+	#if MNG_OSK
+	if (c->iskeyboard) {
+		return(False);
+	}
+	#endif // MNG_OSK
 
 	/* set minimum possible */
 	*w = MAX(1, *w);
@@ -1569,7 +1596,7 @@ configurerequest(XEvent *e)
 	if (ignoreconfigurerequests)
 		return;
 
-	if ((c = wintoclient(ev->window))) {
+	if ((c = wintoclient(ev->window)) && !ISOSK(c)) {
 		if (ev->value_mask & CWBorderWidth)
 			c->bw = ev->border_width;
 		else if (c->isfloating || !selmon->lt[selmon->sellt]->arrange) {
@@ -2066,6 +2093,7 @@ enternotify(XEvent *e)
 	if ((ev->mode != NotifyNormal || ev->detail == NotifyInferior) && ev->window != root)
 		return;
 	c = wintoclient(ev->window);
+	if (ISOSK(c)) return;
 	m = c ? c->mon : wintomon(ev->window);
 	if (m != selmon) {
 		#if LOSEFULLSCREEN_PATCH
@@ -2099,6 +2127,8 @@ expose(XEvent *e)
 void
 focus(Client *c)
 {
+	if (ISOSK(c)) return;
+
 	if (!c || !ISVISIBLE(c))
 		for (c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
 	if (selmon->sel && selmon->sel != c)
@@ -2198,30 +2228,30 @@ focusstack(const Arg *arg)
 	#endif // LOSEFULLSCREEN_PATCH
 	#if BAR_WINTITLEACTIONS_PATCH
 	if (arg->i > 0) {
-		for (c = selmon->sel->next; c && (!ISVISIBLE(c) || (arg->i == 1 && HIDDEN(c))); c = c->next);
+		for (c = selmon->sel->next; c && (!ISVISIBLENOTOSK(c) || (arg->i == 1 && HIDDEN(c))); c = c->next);
 		if (!c)
-			for (c = selmon->clients; c && (!ISVISIBLE(c) || (arg->i == 1 && HIDDEN(c))); c = c->next);
+			for (c = selmon->clients; c && (!ISVISIBLENOTOSK(c) || (arg->i == 1 && HIDDEN(c))); c = c->next);
 	} else {
 		for (i = selmon->clients; i != selmon->sel; i = i->next)
-			if (ISVISIBLE(i) && !(arg->i == -1 && HIDDEN(i)))
+			if (ISVISIBLENOTOSK(i) && !(arg->i == -1 && HIDDEN(i)))
 				c = i;
 		if (!c)
 			for (; i; i = i->next)
-				if (ISVISIBLE(i) && !(arg->i == -1 && HIDDEN(i)))
+				if (ISVISIBLENOTOSK(i) && !(arg->i == -1 && HIDDEN(i)))
 					c = i;
 	}
 	#else
 	if (arg->i > 0) {
-		for (c = selmon->sel->next; c && !ISVISIBLE(c); c = c->next);
+		for (c = selmon->sel->next; c && !ISVISIBLENOTOSK(c); c = c->next);
 		if (!c)
-			for (c = selmon->clients; c && !ISVISIBLE(c); c = c->next);
+			for (c = selmon->clients; c && !ISVISIBLENOTOSK(c); c = c->next);
 	} else {
 		for (i = selmon->clients; i != selmon->sel; i = i->next)
-			if (ISVISIBLE(i))
+			if (ISVISIBLENOTOSK(i))
 				c = i;
 		if (!c)
 			for (; i; i = i->next)
-				if (ISVISIBLE(i))
+				if (ISVISIBLENOTOSK(i))
 					c = i;
 	}
 	#endif // BAR_WINTITLEACTIONS_PATCH
@@ -2548,6 +2578,20 @@ manage(Window w, XWindowAttributes *wa)
 		c->y = c->mon->wy + c->mon->wh - HEIGHT(c);
 	c->x = MAX(c->x, c->mon->wx);
 	c->y = MAX(c->y, c->mon->wy);
+
+	#if MNG_OSK
+	if (c->iskeyboard) {
+		/* Place it at the bottom of the screen */
+		c->y = c->mon->my + c->mon->mh - c->h;
+
+		/* Adjust the height of the monitor to give space for the keyboard */
+		c->mon->mh -= HEIGHT(c);
+		c->mon->wh -= HEIGHT(c);
+
+		/* No border for keyboards */
+		c->bw = 0;
+	}
+	#endif // MNG_OSK
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
@@ -2998,6 +3042,7 @@ recttomon(int x, int y, int w, int h)
 void
 resize(Client *c, int x, int y, int w, int h, int interact)
 {
+	if (ISOSK(c)) return;
 	if (applysizehints(c, &x, &y, &w, &h, interact))
 		resizeclient(c, x, y, w, h);
 }
@@ -3006,6 +3051,7 @@ void
 resizeclient(Client *c, int x, int y, int w, int h)
 {
 	XWindowChanges wc;
+	if (ISOSK(c)) return;
 #if MNG_VANITY_GAPS
 	int					lgappx	= gappx;
 	int					gapN, gapE, gapW;
@@ -4505,6 +4551,8 @@ unmanage(Client *c, int destroyed)
 	#if XKB_PATCH
 	XkbInfo *xkb;
 	#endif // XKB_PATCH
+
+	if (ISOSK(c)) updategeom();
 
 	#if SWALLOW_PATCH
 	if (c->swallowing) {

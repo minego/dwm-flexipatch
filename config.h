@@ -185,6 +185,8 @@ static const Rule rules[] = {
 	RULE(.class = "msoutlook-nativefier-9dd141",
 										.tags = 1 << 6)
 	RULE(.class = "Steam",				.tags = 1 << 8)
+
+	RULE(.class = "Onboard",			.isfloating = 1, .iskeyboard = 1)
 };
 
 
