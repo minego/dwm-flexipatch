@@ -186,7 +186,7 @@ static const Rule rules[] = {
 										.tags = 1 << 6)
 	RULE(.class = "Steam",				.tags = 1 << 8)
 
-	RULE(.class = "Onboard",			.isfloating = 1, .iskeyboard = 1)
+	RULE(.class = "Onboard",			.tags = 0xff, .isfloating = 1, .iskeyboard = 1)
 };
 
 
