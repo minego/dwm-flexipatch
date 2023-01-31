@@ -255,7 +255,7 @@
  *
  * https://dwm.suckless.org/patches/anybar/
  */
-#define BAR_ANYBAR_PATCH 0
+#define BAR_ANYBAR_PATCH 1
 
 /* Anybar option to place the next bar depending on previous bar's position (top or bottom) */
 #define BAR_ANYBAR_TOP_AND_BOTTOM_BARS_PATCH 0
@@ -660,7 +660,7 @@
  * to arrange space for an external bar.
  * https://dwm.suckless.org/patches/insets/
  */
-#define INSETS_PATCH 0
+#define INSETS_PATCH 1
 
 /* This patch (v1.5.7) implements inter-process communication through a UNIX socket for dwm. This
  * allows for the window manager to be queried for information, e.g. listen for events such as tag

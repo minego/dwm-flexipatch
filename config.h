@@ -19,6 +19,13 @@ static const int statusmon               = 'A';
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
 
+#if BAR_ANYBAR_PATCH
+static const int usealtbar               = 1;        /* 1 means use non-dwm status bar */
+static const char *altbarclass           = "eww-bar"; /* Alternate bar class name */
+static const char *altbarcmd             = "eww open bar"; /* Alternate bar launch command */
+#endif // BAR_ANYBAR_PATCH
+
+
 /* Variable column layout */
 static const int nmastercols	         = 1;	/* number of master columns for n column layout */
 static const int nrightcols		         = 1;	/* number of right columns for n column layout */
@@ -187,8 +194,17 @@ static const Rule rules[] = {
 	RULE(.class = "Steam",				.tags = 1 << 8)
 
 	RULE(.class = "Onboard",			.isfloating = 1, .iskeyboard = 1)
+	RULE(.class = "eww-bar",			.isfloating = 1)
 };
 
+#if INSETS_PATCH
+static const Inset default_inset = {
+	.x = 0,
+	.y = 20,
+	.w = 0,
+	.h = 0,
+};
+#endif // INSETS_PATCH
 
 /* Bar rules allow you to configure what is shown where on the bar, as well as
  * introducing your own bar modules.
